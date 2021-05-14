@@ -5,7 +5,7 @@ import Ventas from './components/ventas/Ventas.jsx';
 
 function App() {
 	return (
-		<div className='container-fluid'>
+		<>
 			<Router>
 				<Switch>
 					<Route exact path='/' component={Login}></Route>
@@ -13,7 +13,7 @@ function App() {
 					<Route exact path='/ventas' component={Ventas}></Route>
 				</Switch>
 			</Router>
-		</div>
+		</>
 	);
 }
 

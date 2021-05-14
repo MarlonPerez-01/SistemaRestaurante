@@ -64,7 +64,7 @@ export const seleccionar = async (desde, limite) => {
     const ventaQuery = `SELECT v.id_venta, c.nombres, c.apellidos, v.fecha FROM Venta AS v INNER JOIN Usuario AS u ON v.id_usuario = u.id_usuario LEFT JOIN Cliente AS c ON v.id_cliente = c.id_cliente WHERE v.estado = 1`;
     const dataVenta = await promisePool.query(ventaQuery);
 
-    const queryDetalle = `SELECT d.id_venta, d.id_detalle_venta, p.nombre FROM DetallesVenta AS d LEFT JOIN Plato AS p ON d.id_plato = p.id_plato  WHERE d.estado = 1`;
+    const queryDetalle = `SELECT d.id_venta, d.id_detalle_venta, d.cantidad, p.nombre FROM DetallesVenta AS d LEFT JOIN Plato AS p ON d.id_plato = p.id_plato WHERE d.estado = 1`;
     const dataDetalle = await promisePool.query(queryDetalle);
 
     for (let venta of dataVenta[0]) {

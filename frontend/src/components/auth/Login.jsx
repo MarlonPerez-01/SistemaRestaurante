@@ -26,8 +26,13 @@ const Login = () => {
 	};
 
 	return (
-		<div className='mt-3'>
-			<h1 className='text-center'>Inicia Sesión</h1>
+		<>
+			<div className='row mt-3'>
+				<h1 className='col text-center mb-3 mt-3 text-secondary'>
+					Inicia Sesión
+				</h1>
+			</div>
+
 			<form onSubmit={enviarLogin}>
 				<label htmlFor='username'>Usuario</label>
 				<input
@@ -55,7 +60,7 @@ const Login = () => {
 					className='btn btn-primary mt-3'
 				/>
 			</form>
-		</div>
+		</>
 	);
 };
 

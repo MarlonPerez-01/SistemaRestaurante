@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Detalles from './Detalles';
 import Orden from './Orden';
 
 const Ordenes = () => {
@@ -20,17 +19,47 @@ const Ordenes = () => {
 			.catch((err) => {
 				console.log(err);
 			});
-	}, []);
+	}, [ordenes]);
+
+	const handleEliminar = async (id) => {
+		try {
+			const res = await fetch(`http://127.0.0.1:8080/ventas/${id}`, {
+				method: 'DELETE',
+				headers: { 'Content-type': 'application/json; charset=UTF-8' }
+			});
+
+			let ordenesActualizadas = [...ordenes].filter((i) => i.id !== id);
+			setOrdenes(ordenesActualizadas);
+
+			if (res.status === 200) {
+				return await res.json();
+			}
+			if (res.status === 404) {
+			}
+
+			console.log(ordenes);
+		} catch (err) {
+			console.log(err);
+		}
+	};
 
 	return (
-		<div>
-			<h1 className='text-center mt-3'>Ordenes</h1>
-			<div>
+		<>
+			<div className='row'>
+				<h1 className='col text-center mb-3 mt-3 text-secondary'>
+					Listado de ordenes
+				</h1>
+			</div>
+			<div className='row'>
 				{ordenes.map((orden) => (
-					<Orden key={orden.id_venta} orden={orden} />
+					<Orden
+						key={orden.id_venta}
+						orden={orden}
+						handleEliminar={handleEliminar}
+					/>
 				))}
 			</div>
-		</div>
+		</>
 	);
 };
 
