@@ -4,40 +4,30 @@ import Orden from './Orden';
 const Ordenes = () => {
 	const [ordenes, setOrdenes] = useState([]);
 
+	const obtenerOrdenes = async () => {
+		const res = await fetch('http://127.0.0.1:8080/ventas', {
+			method: 'GET'
+		});
+		const data = await res.json();
+
+		setOrdenes(data.data);
+	};
+
 	useEffect(() => {
-		fetch('http://127.0.0.1:8080/ventas')
-			.then((res) => {
-				if (res.status === 200) {
-					return res.json();
-				}
-				if (res.status === 404) {
-				}
-			})
-			.then((data) => {
-				setOrdenes(data.data);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	}, [ordenes]);
+		obtenerOrdenes();
+	}, []);
 
 	const handleEliminar = async (id) => {
 		try {
-			const res = await fetch(`http://127.0.0.1:8080/ventas/${id}`, {
+			await fetch(`http://127.0.0.1:8080/ventas/${id}`, {
 				method: 'DELETE',
 				headers: { 'Content-type': 'application/json; charset=UTF-8' }
 			});
 
-			let ordenesActualizadas = [...ordenes].filter((i) => i.id !== id);
+			let ordenesActualizadas = [...ordenes].filter((orden) => orden.id !== id);
 			setOrdenes(ordenesActualizadas);
 
-			if (res.status === 200) {
-				return await res.json();
-			}
-			if (res.status === 404) {
-			}
-
-			console.log(ordenes);
+			obtenerOrdenes();
 		} catch (err) {
 			console.log(err);
 		}
@@ -46,19 +36,21 @@ const Ordenes = () => {
 	return (
 		<>
 			<div className='row'>
-				<h1 className='col text-center mb-3 mt-3 text-secondary'>
+				<h1 className='col text-center mb-4 mt-4 text-secondary'>
 					Listado de ordenes
 				</h1>
 			</div>
-			<div className='row'>
-				{ordenes.map((orden) => (
-					<Orden
-						key={orden.id_venta}
-						orden={orden}
-						handleEliminar={handleEliminar}
-					/>
-				))}
-			</div>
+			{ordenes.length > 0 && (
+				<div className='row'>
+					{ordenes.map((orden) => (
+						<Orden
+							key={orden.id_venta}
+							orden={orden}
+							handleEliminar={handleEliminar}
+						/>
+					))}
+				</div>
+			)}
 		</>
 	);
 };
