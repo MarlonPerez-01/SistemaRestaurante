@@ -1,67 +1,99 @@
 import React, { useState } from 'react';
+import Error from '../Error';
 
 const Login = () => {
-	//state para iniciar sesion
-	const [usuario, setUsuario] = useState({
-		username: '',
-		contrasenia: ''
-	});
+  //state para iniciar sesion
+  const [usuario, setUsuario] = useState({
+    nombre_usuario: '',
+    contrasenia: ''
+  });
 
-	//Extrayendo los valores
-	const { username, contrasenia } = usuario;
+  const [autenticacion, setAutenticacion] = useState({
+    token: '',
+    nombre_tipo_usuario: ''
+  });
 
-	const handleChange = (e) => {
-		setUsuario({
-			...usuario,
-			[e.target.name]: e.target.value
-		});
-	};
+  const [error, setError] = useState(false);
 
-	const enviarLogin = (e) => {
-		e.preventDefault();
+  //Extrayendo los valores
+  const { nombre_usuario, contrasenia } = usuario;
 
-		//validacion de campos
+  const handleChange = (e) => {
+    setUsuario({
+      ...usuario,
+      [e.target.name]: e.target.value
+    });
+  };
 
-		// history.push("/home")
-	};
+  const obtenerToken = async (usuario) => {
+    const res = await fetch('http://127.0.0.1:8080/login', {
+      method: 'POST',
+      headers: { 'Content-type': 'application/json; charset=UTF-8' },
+      body: JSON.stringify(usuario)
+    });
+    const data = await res.json();
+    if (data.data) {
+      setError(false);
+      setAutenticacion(data.data);
+    } else {
+      setError(true);
+    }
+  };
 
-	return (
-		<>
-			<div className='row mt-3'>
-				<h1 className='col text-center mb-3 mt-3 text-secondary'>
-					Inicia Sesión
-				</h1>
-			</div>
+  const iniciarSesion = (e) => {
+    e.preventDefault();
 
-			<form onSubmit={enviarLogin}>
-				<label htmlFor='username'>Usuario</label>
-				<input
-					id='username'
-					name='username'
-					value={username}
-					onChange={handleChange}
-					type='text'
-					className='form-control'
-				/>
+    //validacion de campos
+    // let ej = obtenerToken(usuario);
+    obtenerToken(usuario);
 
-				<label htmlFor='contrasenia'>Contraseña</label>
-				<input
-					id='contrasenia'
-					name='contrasenia'
-					value={contrasenia}
-					onChange={handleChange}
-					type='password'
-					className='form-control'
-				/>
+    // history.push("/home")
+  };
 
-				<input
-					type='submit'
-					value='Inicia Sesión'
-					className='btn btn-primary mt-3'
-				/>
-			</form>
-		</>
-	);
+  return (
+    <>
+      {error && (
+        <div className="row mt-3">
+          <Error mensaje="Error en la autenticación" />
+        </div>
+      )}
+      <div className="row mt-3">
+        <h1 className="col text-center mb-3 mt-3 text-secondary">
+          Inicia Sesión
+        </h1>
+      </div>
+
+      <form onSubmit={iniciarSesion}>
+        <label htmlFor="nombre_usuario">Usuario</label>
+        <input
+          id="nombre_usuario"
+          name="nombre_usuario"
+          value={nombre_usuario}
+          onChange={handleChange}
+          type="text"
+          className="form-control"
+          required
+        />
+
+        <label htmlFor="contrasenia">Contraseña</label>
+        <input
+          id="contrasenia"
+          name="contrasenia"
+          value={contrasenia}
+          onChange={handleChange}
+          type="password"
+          className="form-control"
+          required
+        />
+
+        <input
+          type="submit"
+          value="Inicia Sesión"
+          className="btn btn-primary mt-3"
+        />
+      </form>
+    </>
+  );
 };
 
 export default Login;

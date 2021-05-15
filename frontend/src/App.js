@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Login from './components/auth/Login.jsx';
 import Ordenes from './components/ordenes/Ordenes.jsx';
+import Platos from './components/platos/Platos.jsx';
 import Ventas from './components/ventas/Ventas.jsx';
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
 					<Route exact path='/' component={Login}></Route>
 					<Route exact path='/ordenes' component={Ordenes}></Route>
 					<Route exact path='/ventas' component={Ventas}></Route>
+					<Route exact path='/platos' component={Platos}></Route>
 				</Switch>
 			</Router>
 		</>

@@ -24,7 +24,7 @@ export const seleccionar = async (req, res) => {
   //Se resta uno porque inicia en la posicion cero, si no manda nada por defecto sera cero.
   desde = desde - 1 || 0;
   //si no manda nada el cliente, por defecto el limite seran diez registros
-  limite = limite || 10;
+  limite = limite || 100;
 
   try {
     const data = await Plato.seleccionar(desde, limite);
@@ -55,7 +55,7 @@ export const insertar = async (req, res) => {
     if (data[0].affectedRows === 1) {
       return res.json({
         msg: 'El registro ha sido insertado',
-        data: { id: data[0].insertId, ...nuevoPlato }
+        data: { id_plato: data[0].insertId, ...nuevoPlato }
       });
     }
 

@@ -18,9 +18,9 @@ import {
 } from '../middlewares/validaciones';
 
 export default (app) => {
-  app.get('/platos/:id', validarParams(idSchema), chef, seleccionarById);
+  app.get('/platos/:id', validarParams(idSchema), seleccionarById);
 
-  app.get('/platos', validarQuery(intervaloSchema), chef, seleccionar);
+  app.get('/platos', validarQuery(intervaloSchema), seleccionar);
 
   app.post('/platos', validarBody(platoSchema), insertar);
 
