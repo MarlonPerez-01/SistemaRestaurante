@@ -57,19 +57,6 @@ export const actualizar = async (id, nuevoPlato) => {
     )} AND estado = 1`;
     const data = await promisePool.query(query, nuevoPlato);
 
-    // validando que no haya ocurrido error al actualizar el plato
-    // const id = data[0];
-    console.log(data[0].affectedRows);
-    const filaActualizada = data[0].affectedRows;
-
-    if (filaActualizada) {
-      const query = `UPDATE Provision SET cantidad_disponible = ${cantidad} WHERE id_plato=${pool.escape(
-        id
-      )}`;
-      console.log(query);
-      await promisePool.query(query);
-    }
-
     return data[0];
   } catch (err) {
     throw err;

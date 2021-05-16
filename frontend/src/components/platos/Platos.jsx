@@ -5,26 +5,20 @@ import Listado from './Listado';
 // import Plato from './Plato';
 
 const Platos = () => {
-  //estado inicial de plato
+  //Initial states
   const platoInitial = {
     nombre: '',
     descripcion: '',
     precio: ''
   };
 
-  //state para insertar
-  const [plato, setPlato] = useState(platoInitial);
-
-  //state para la lista de platos
+  //states
   const [platos, setPlatos] = useState([]);
-
-  //state para el error
+  const [plato, setPlato] = useState(platoInitial);
   const [error, setError] = useState(false);
-
-  //state para el mensaje
   const [mensaje, setMensaje] = useState('Cargando...');
 
-  //manejar inputs para insertar nuevo plato
+  //handleChange
   const handleAgregarChange = (e) => {
     setPlato({
       ...plato,
@@ -122,6 +116,7 @@ const Platos = () => {
             platos={platos}
             eliminar={eliminar}
             actualizar={actualizar}
+            setPlatos={setPlatos}
           />
         </div>
       </div>

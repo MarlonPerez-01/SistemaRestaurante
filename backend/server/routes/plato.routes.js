@@ -28,7 +28,6 @@ export default (app) => {
     '/platos/:id',
     validarParams(idSchema),
     validarBody(platoSchema),
-    admin,
     actualizar
   );
 
