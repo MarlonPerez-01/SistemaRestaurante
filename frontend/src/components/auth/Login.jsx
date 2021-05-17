@@ -1,23 +1,24 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+
 import Error from '../Error';
+import { almacenarSesion, leerSesion } from '../../helper/autenticacion';
 
 const Login = () => {
-  //state para iniciar sesion
-  const [usuario, setUsuario] = useState({
+  //initial state
+  const usuarioInitialState = {
     nombre_usuario: '',
     contrasenia: ''
-  });
+  };
 
-  const [autenticacion, setAutenticacion] = useState({
-    token: '',
-    nombre_tipo_usuario: ''
-  });
-
+  //states
+  const [usuario, setUsuario] = useState(usuarioInitialState);
   const [error, setError] = useState(false);
 
-  //Extrayendo los valores
+  //Extrayendo valores del state
   const { nombre_usuario, contrasenia } = usuario;
 
+  //Manejando los inputs del login
   const handleChange = (e) => {
     setUsuario({
       ...usuario,
@@ -25,30 +26,65 @@ const Login = () => {
     });
   };
 
+  //se usa para manejar el redireccionamiento
+  const history = useHistory();
+
+  //obtener token mediante peticion post
   const obtenerToken = async (usuario) => {
     const res = await fetch('http://127.0.0.1:8080/login', {
       method: 'POST',
       headers: { 'Content-type': 'application/json; charset=UTF-8' },
       body: JSON.stringify(usuario)
     });
-    const data = await res.json();
-    if (data.data) {
+    const datos = await res.json();
+
+    //Almacenar el token y cargo en caso de ser validas las credenciales
+    if (datos.data) {
       setError(false);
-      setAutenticacion(data.data);
+      almacenarSesion(datos.data.token, datos.data.nombre_tipo_usuario);
+      redireccionar(datos.data.nombre_tipo_usuario);
     } else {
       setError(true);
     }
+
+    //eliminar las credeciales del state
+    setUsuario(usuarioInitialState);
   };
 
   const iniciarSesion = (e) => {
     e.preventDefault();
 
-    //validacion de campos
-    // let ej = obtenerToken(usuario);
-    obtenerToken(usuario);
+    //TODO: validacion de campos
 
-    // history.push("/home")
+    obtenerToken(usuario);
   };
+
+  //redireccionar segun el cargo
+  const redireccionar = (cargo) => {
+    if (cargo === 'ADMIN') {
+      console.log('Es ADMIN');
+      history.push('platos');
+    } else if (cargo === 'CAJERO') {
+      console.log('Es CAJERO');
+      history.push('ventas');
+    } else if (cargo === 'CHEF') {
+      console.log('Es CHEF');
+      history.push('ordenes');
+    } else {
+      console.log('desconocido');
+      history.push('/');
+    }
+  };
+
+  useEffect(() => {
+    //redireccionar a la vista correspondiente si existe una sesion
+    const sesion = leerSesion();
+    sesion.existe && redireccionar(sesion.cargo);
+
+    return () => {
+      setUsuario(usuarioInitialState);
+    };
+  }, []);
 
   return (
     <>

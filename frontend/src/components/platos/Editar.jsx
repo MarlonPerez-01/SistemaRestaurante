@@ -1,7 +1,6 @@
 import React from 'react';
 
-// { plato, editar, handleEditarChange }
-const Editar = ({ handleEditarChange, plato_edit, editarPlato }) => {
+const Editar = ({ plato_edit, editar, handleEditarChange }) => {
   return (
     <>
       {/* <!-- Modal --> */}
@@ -77,7 +76,7 @@ const Editar = ({ handleEditarChange, plato_edit, editarPlato }) => {
                 type="button"
                 className="btn btn-primary"
                 value="Actualizar"
-                onClick={() => editarPlato(plato_edit.id_plato)}
+                onClick={() => editar(plato_edit.id_plato)}
               />
             </div>
           </div>

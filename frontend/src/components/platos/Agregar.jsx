@@ -4,7 +4,7 @@ const Agregar = ({ plato, insertar, handleAgregarChange }) => {
   return (
     <>
       <h3 className="text-secondary">Nuevo plato</h3>
-      <form onSubmit={insertar}>
+      <form>
         <div className="form-group">
           <label className="form-label" htmlFor="nombre">
             Nombre:
@@ -48,7 +48,12 @@ const Agregar = ({ plato, insertar, handleAgregarChange }) => {
           />
         </div>
 
-        <input type="submit" value="Agregar" className="btn btn-primary mt-3" />
+        <input
+          type="button"
+          value="Agregar"
+          className="btn btn-primary mt-3"
+          onClick={insertar}
+        />
       </form>
     </>
   );

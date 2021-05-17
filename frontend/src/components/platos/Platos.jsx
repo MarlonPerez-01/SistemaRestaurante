@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import Error from '../Error';
+import Header from '../Header';
 import Agregar from './Agregar';
 import Listado from './Listado';
-// import Plato from './Plato';
+import * as fetchPlatos from '../../helper/fetchPlatos';
+import { leerSesion } from '../../helper/autenticacion';
+import { useHistory } from 'react-router';
 
 const Platos = () => {
   //Initial states
@@ -26,19 +28,29 @@ const Platos = () => {
     });
   };
 
-  //Peticiones fetch
-  const obtenerPlatos = async () => {
+  //Operaciones CRUD
+  const eliminar = async (id) => {
     try {
-      const res = await fetch(`http://127.0.0.1:8080/platos`, {
-        method: 'GET',
-        headers: { 'Content-type': 'application/json; charset=UTF-8' }
-      });
+      await fetchPlatos.eliminar(id);
 
-      const datos = await res.json();
+      let platosActualizado = [...platos].filter(
+        (plato) => plato.id_plato !== id
+      );
 
-      setPlatos(datos.data);
+      //TODO: actualizar con los valores del response para que muestre los decimales
+      setPlatos(platosActualizado);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-      if (!datos.data.length > 0) {
+  const obtener = async (token) => {
+    try {
+      const datos = await fetchPlatos.obtener(token);
+
+      if (datos.data.length > 0) {
+        setPlatos(datos.data);
+      } else {
         setMensaje(datos.msg || 'No hay platos');
       }
     } catch (err) {
@@ -46,63 +58,42 @@ const Platos = () => {
     }
   };
 
-  const eliminar = async (id) => {
+  const insertar = async () => {
+    //TODO: validacion de campos
     try {
-      await fetch(`http://127.0.0.1:8080/platos/${id}`, {
-        method: 'DELETE',
-        headers: { 'Content-type': 'application/json; charset=UTF-8' }
-      });
+      const datos = await fetchPlatos.insertar(plato);
 
-      let platosActualizado = [...platos].filter(
-        (plato) => plato.id_plato !== id
-      );
-      setPlatos(platosActualizado);
+      //TODO: mostrar error en caso que exista
+      if (datos.data) {
+        setError(false);
+        setPlato(platoInitial);
+        setPlatos([...platos, datos.data]);
+      } else {
+        setError(true);
+      }
     } catch (err) {
       console.log(err);
     }
   };
 
-  const actualizar = async (id) => {
-    console.log(id);
-  };
-
-  const insertar = async (e) => {
-    e.preventDefault();
-
-    //validacion de campos
-
-    //peticion POST
-    const res = await fetch('http://127.0.0.1:8080/platos', {
-      method: 'POST',
-      headers: { 'Content-type': 'application/json; charset=UTF-8' },
-      body: JSON.stringify(plato)
-    });
-
-    const datos = await res.json();
-
-    //TODO: mostrar error en caso que exista
-    if (res.status >= 200 && res.status <= 399) {
-      setError(false);
-      setPlato(platoInitial);
-
-      //Agregando al state que tiene todos los platos
-      setPlatos([...platos, datos.data]);
-    } else {
-      // setMensaje(datos.data.msg);
-      setError(true);
-    }
-  };
+  const history = useHistory();
 
   useEffect(() => {
-    obtenerPlatos();
+    //redireccionar al login si no es ADMIN
+    const sesion = leerSesion();
+
+    if (sesion.existe && sesion.cargo === 'ADMIN') {
+      obtener(sesion.token);
+    } else {
+      history.push('/');
+    }
   }, []);
 
   return (
     <>
-      <div className="row">
-        <h1 className="col text-center mb-4 mt-4 text-secondary">Platillos</h1>
+      <div className="row mb-5">
+        <Header />
       </div>
-      {/* {platos.length > 0 && ( */}
       <div className="row">
         <div className="col">
           <Agregar
@@ -112,12 +103,7 @@ const Platos = () => {
           />
         </div>
         <div className="col-8">
-          <Listado
-            platos={platos}
-            eliminar={eliminar}
-            actualizar={actualizar}
-            setPlatos={setPlatos}
-          />
+          <Listado platos={platos} eliminar={eliminar} setPlatos={setPlatos} />
         </div>
       </div>
 

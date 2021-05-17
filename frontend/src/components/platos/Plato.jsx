@@ -1,22 +1,28 @@
 import React from 'react';
+import Eliminar from './Eliminar';
 
-const Plato = ({ plato, handleEliminar }) => {
-	return (
-		<ul className='list-group mb-5 col-md-4 text-capitalize'>
-			<li className='list-group-item list-group-item-primary text-center'>
-				{plato.nombre}
-			</li>
-			<li className='list-group-item text-center'>{plato.precio}</li>
-			<li className='list-group-item text-center'>{plato.descripcion}</li>
-
-			<input
-				type='submit'
-				className='btn btn-outline-secondary'
-				value='Eliminar Plato'
-				onClick={() => handleEliminar(plato.id_plato)}
-			></input>
-		</ul>
-	);
+const Plato = ({ plato, eliminar, abrirEditar }) => {
+  return (
+    <>
+      <td>{plato.nombre}</td>
+      <td>{plato.descripcion}</td>
+      <td>{plato.precio}</td>
+      <td colSpan="2">
+        <button
+          type="button"
+          className="btn btn-success"
+          data-toggle="modal"
+          data-bs-toggle="modal"
+          data-bs-target="#myModal"
+          onClick={() => abrirEditar(plato.id_plato)}
+        >
+          Editar
+        </button>
+        {' | '}
+        <Eliminar eliminar={eliminar} id_plato={plato.id_plato} />
+      </td>
+    </>
+  );
 };
 
 export default Plato;

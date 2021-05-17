@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import Editar from './Editar';
+import Plato from './Plato';
+
+import * as fetchPlatos from '../../helper/fetchPlatos';
 
 const Listado = ({ platos, eliminar, setPlatos }) => {
+  //initial state
   const plato_edit_initial = {
     nombre: '',
     descripcion: '',
     precio: ''
   };
 
+  //state
   const [plato_edit, set_plato_edit] = useState(plato_edit_initial);
 
-  //pasa al state plato_edit los datos del registro seleccionado
-  const editar = (id) => {
-    const plato = platos.filter((plato) => plato.id_plato === id);
-    set_plato_edit(...plato);
-  };
-
+  //handleChange
   const handleEditarChange = (e) => {
     set_plato_edit({
       ...plato_edit,
@@ -23,33 +23,22 @@ const Listado = ({ platos, eliminar, setPlatos }) => {
     });
   };
 
-  //Llamando al endpoint para actualizar platos
-  const editarPlato = async (id) => {
+  const abrirEditar = (id) => {
+    const plato = platos.filter((plato) => plato.id_plato === id);
+    set_plato_edit(...plato);
+  };
+
+  const editar = async (id) => {
     try {
-      //TODO: Validacion de campos
+      //TODO: validacion de campos
 
-      //Peticion para actualizar
-      const res = await fetch(`http://127.0.0.1:8080/platos/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-type': 'application/json; charset=UTF-8' },
-        body: JSON.stringify({
-          nombre: plato_edit.nombre,
-          precio: plato_edit.precio,
-          descripcion: plato_edit.descripcion
-        })
-      });
-
-      //Actualizando el state del listado de platos
-
-      const datos = await res.json();
-
-      console.log(datos);
-
+      //TODO: mostrar error en caso que exista
+      await fetchPlatos.editar(plato_edit);
       setPlatos(
         platos.map((item) => (item.id_plato === id ? plato_edit : item))
       );
 
-      //Cerrar el modal
+      //TODO: Cerrar el modal
     } catch (err) {
       console.log(err);
     }
@@ -57,14 +46,14 @@ const Listado = ({ platos, eliminar, setPlatos }) => {
 
   return (
     <>
-      <h3 className="text-secondary">Listado</h3>
+      <h3 className="text-secondary">Listado de platos</h3>
 
       <table className="table table-striped text-secondary">
         <thead>
           <tr>
             <th>Nombre</th>
-            <th>Precio</th>
             <th>Descripción</th>
+            <th>Precio</th>
             <th>Acciones</th>
           </tr>
         </thead>
@@ -78,28 +67,11 @@ const Listado = ({ platos, eliminar, setPlatos }) => {
           ) : (
             platos.map((plato) => (
               <tr key={plato.id_plato}>
-                <td>{plato.nombre}</td>
-                <td>{plato.precio}</td>
-                <td>{plato.descripcion}</td>
-                <td colSpan="2">
-                  <button
-                    type="button"
-                    className="btn btn-success"
-                    data-toggle="modal"
-                    data-bs-toggle="modal"
-                    data-bs-target="#myModal"
-                    onClick={() => editar(plato.id_plato)}
-                  >
-                    Editar
-                  </button>
-                  {' | '}
-                  <button
-                    className="btn btn-danger"
-                    onClick={() => eliminar(plato.id_plato)}
-                  >
-                    Eliminar
-                  </button>
-                </td>
+                <Plato
+                  plato={plato}
+                  eliminar={eliminar}
+                  abrirEditar={abrirEditar}
+                />
               </tr>
             ))
           )}
@@ -112,9 +84,9 @@ const Listado = ({ platos, eliminar, setPlatos }) => {
         className="modal fade"
         role="dialog"
         plato_edit={plato_edit}
-        handleEditarChange={handleEditarChange}
+        editar={editar}
         set_plato_edit={set_plato_edit}
-        editarPlato={editarPlato}
+        handleEditarChange={handleEditarChange}
       />
     </>
   );
