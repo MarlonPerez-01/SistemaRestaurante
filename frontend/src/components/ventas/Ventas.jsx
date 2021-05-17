@@ -1,7 +1,11 @@
 import React from 'react';
+import Header from '../Header';
 
 const Ventas = () => {
-	return <h1>Desde Ventas</h1>;
+	return (<>
+	<Header />
+		<h1>Desde Ventas</h1>
+	</>);
 };
 
 export default Ventas;

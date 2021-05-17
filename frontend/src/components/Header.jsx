@@ -11,6 +11,7 @@ const Header = () => {
   };
   return (
     <>
+    
       <nav className="navbar navbar-light bg-light">
         <div className="container-fluid">
           <span className="navbar-brand">Nombre Restaurante</span>
@@ -20,9 +21,11 @@ const Header = () => {
             value="Cerrar Sesión"
             onClick={cerrarSesion}
           />
-        </div>
+        
+      </div>
       </nav>
     </>
+
   );
 };
 
