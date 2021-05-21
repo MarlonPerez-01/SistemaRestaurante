@@ -29,6 +29,7 @@ export const insertar = async (plato) => {
     return err;
   }
 };
+
 export const editar = async (plato_edit) => {
   try {
     const res = await fetch(
