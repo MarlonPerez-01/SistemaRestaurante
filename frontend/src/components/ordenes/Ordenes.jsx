@@ -33,7 +33,6 @@ const Ordenes = () => {
     const sesion = leerSesion();
 
     if (sesion.existe && sesion.cargo === 'CHEF') {
-      
       obtenerOrdenes(sesion.token);
     } else {
       history.push('/');
@@ -42,9 +41,13 @@ const Ordenes = () => {
 
   const eliminar = async (id) => {
     try {
+      const { token } = leerSesion();
       await fetch(`http://127.0.0.1:8080/ventas/${id}`, {
         method: 'DELETE',
-        headers: { 'Content-type': 'application/json; charset=UTF-8' }
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+          'x-auth-token': token
+        }
       });
 
       let ordenesActualizadas = [...ordenes].filter(
@@ -61,11 +64,9 @@ const Ordenes = () => {
 
   return (
     <>
-    <Header />
+      <Header />
       <div className="row">
-        <h1 className="col mb-4 mt-4 text-secondary">
-          Listado de ordenes
-        </h1>
+        <h1 className="col mb-4 mt-4 text-secondary">Listado de ordenes</h1>
       </div>
       {ordenes.length > 0 && (
         <div className="row">

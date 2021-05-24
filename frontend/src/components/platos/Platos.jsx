@@ -31,7 +31,8 @@ const Platos = () => {
   //Operaciones CRUD
   const eliminar = async (id) => {
     try {
-      await fetchPlatos.eliminar(id);
+      const { token } = leerSesion();
+      await fetchPlatos.eliminar(id, token);
 
       let platosActualizado = [...platos].filter(
         (plato) => plato.id_plato !== id
@@ -61,7 +62,8 @@ const Platos = () => {
   const insertar = async () => {
     //TODO: validacion de campos
     try {
-      const datos = await fetchPlatos.insertar(plato);
+      const { token } = leerSesion();
+      const datos = await fetchPlatos.insertar(plato, token);
 
       //TODO: mostrar error en caso que exista
       if (datos.data) {
@@ -81,7 +83,6 @@ const Platos = () => {
   useEffect(() => {
     //redireccionar al login si no es ADMIN
     const sesion = leerSesion();
-
     if (sesion.existe && sesion.cargo === 'ADMIN') {
       obtener(sesion.token);
     } else {

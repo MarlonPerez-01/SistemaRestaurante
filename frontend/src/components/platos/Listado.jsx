@@ -3,6 +3,7 @@ import Editar from './Editar';
 import Plato from './Plato';
 
 import * as fetchPlatos from '../../helper/fetchPlatos';
+import { leerSesion } from '../../helper/autenticacion';
 
 const Listado = ({ platos, eliminar, setPlatos }) => {
   //initial state
@@ -33,7 +34,8 @@ const Listado = ({ platos, eliminar, setPlatos }) => {
       //TODO: validacion de campos
 
       //TODO: mostrar error en caso que exista
-      await fetchPlatos.editar(plato_edit);
+      const { token } = leerSesion();
+      await fetchPlatos.editar(plato_edit, token);
       setPlatos(
         platos.map((item) => (item.id_plato === id ? plato_edit : item))
       );

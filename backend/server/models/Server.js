@@ -6,9 +6,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 
 //Rutas
-import EmpleadoRoutes from '../routes/empleado.routes';
-import UsuarioRoutes from '../routes/usuario.routes';
-import ClienteRoutes from '../routes/cliente.routes';
+
 import PlatoRoutes from '../routes/plato.routes';
 import VentaRoutes from '../routes/venta.routes';
 import LoginRoutes from '../routes/login.routes';
@@ -36,9 +34,6 @@ export class Server {
   }
 
   routes() {
-    EmpleadoRoutes(this.app);
-    UsuarioRoutes(this.app);
-    ClienteRoutes(this.app);
     PlatoRoutes(this.app);
     VentaRoutes(this.app);
     LoginRoutes(this.app);

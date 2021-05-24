@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router';
 import Header from '../Header';
 import * as fetchPlatos from '../../helper/fetchPlatos';
 import * as fetchVentas from '../../helper/fetchVentas';
+import { leerSesion } from '../../helper/autenticacion';
 
 const Plato = () => {
   const [platos, setPlatos] = useState([]);
@@ -9,8 +11,9 @@ const Plato = () => {
   const [opcionActual, setOpcionActual] = useState(0);
   const [detalles, setDetalles] = useState([]);
   const [total, setTotal] = useState(0);
-  const [cantidadActual, setCantidadActual] = useState(0);
+  const [cantidadActual, setCantidadActual] = useState(1);
   const [cliente, setCliente] = useState({ nombres: '', apellidos: '' });
+  const [alerta, setAlerta] = useState({ mostrar: false, msg: '', color: '' });
 
   // const [total, setTotal] = useState(0);
 
@@ -26,11 +29,12 @@ const Plato = () => {
   };
 
   const nuevaOrden = (id) => {
-    //TODO: informar al usuario que falta llenar campos
-    if (cliente.nombres && cliente.apellidos && detalles.length >= 0) {
-      console.log('se puede enviar');
-    } else {
-      console.log('no se puede enviar');
+    if (!(cliente.nombres && cliente.apellidos && detalles.length > 0)) {
+      setAlerta({
+        mostrar: true,
+        msg: 'Por favor ingrese todos los datos',
+        color: 'warning'
+      });
       return;
     }
 
@@ -50,6 +54,11 @@ const Plato = () => {
 
     //envio de la peticion post
     fetchVentas.insertar(venta);
+    setAlerta({
+      mostrar: true,
+      msg: 'La venta fue agregada exitosamente!',
+      color: 'success'
+    });
     console.log('nueva orden:', venta);
   };
 
@@ -62,12 +71,21 @@ const Plato = () => {
     const repetido = detalles.find(
       (plato) => plato.id_plato === parseInt(opcionActual)
     );
-    if (repetido) return;
+    if (repetido || opcionActual === 0) return;
 
     setDetalles([...detalles, { ...nuevoDetalle, cantidad: cantidadActual }]);
 
     //se suma al total
-    sumarTotal(nuevoDetalle.precio, cantidadActual);
+    actualizarTotal(nuevoDetalle.precio, cantidadActual);
+  };
+
+  const limpiar = () => {
+    setOpcionActual(0);
+    setDetalles([]);
+    setTotal(0);
+    setCantidadActual(1);
+    setCliente({ nombres: '', apellidos: '' });
+    setAlerta({ mostrar: false, msg: '', color: '' });
   };
 
   const handleCliente = (e) => {
@@ -79,16 +97,31 @@ const Plato = () => {
   };
 
   const eliminar = (id) => {
-    console.log('eliminado');
-    //TODO: quitar del total
+    const platoEliminar = detalles.find(
+      (plato) => plato.id_plato === parseInt(id)
+    );
+
+    setDetalles([...detalles].filter((plato) => plato.id_plato !== id));
+
+    //se resta del total
+    actualizarTotal(-platoEliminar.precio, platoEliminar.cantidad);
   };
 
-  const sumarTotal = (precio, cantidad) => {
+  const actualizarTotal = (precio, cantidad) => {
     setTotal(total + precio * cantidad);
   };
 
+  const history = useHistory();
+
   useEffect(() => {
-    obtenerOpciones();
+    //redireccionar al login si no es CAJERO
+    const sesion = leerSesion();
+
+    if (sesion.existe && sesion.cargo === 'CAJERO') {
+      obtenerOpciones(sesion.token);
+    } else {
+      history.push('/');
+    }
   }, []);
 
   const handleSelect = (e) => {
@@ -145,12 +178,19 @@ const Plato = () => {
               placeholder="Cantidad"
               className="form-control mb-2"
               onChange={handleCantidadActual}
+              value={cantidadActual}
             />
             <button
-              className="btn btn-primary btn-block form-control"
+              className="btn btn-primary btn-block form-control mb-1"
               onClick={agregarPlato}
             >
               Agregar Plato/s
+            </button>
+            <button
+              className="btn btn-warning btn-block form-control"
+              onClick={limpiar}
+            >
+              Limpiar
             </button>
           </div>
         </div>
@@ -192,19 +232,31 @@ const Plato = () => {
               )}
             </tbody>
             <tfoot>
-              <tr>
-                <td> </td>
-                <td> </td>
-                <td>Total: ${total.toFixed(2)}</td>
-                <td>
-                  <button className="btn btn-primary mt-2" onClick={nuevaOrden}>
-                    Nueva Orden
-                  </button>
-                </td>
-              </tr>
+              {detalles.length >= 1 && (
+                <tr>
+                  <td> </td>
+                  <td> </td>
+                  <td>Total: ${total.toFixed(2)}</td>
+                  <td>
+                    <button
+                      className="btn btn-primary mt-2"
+                      onClick={nuevaOrden}
+                    >
+                      Nueva Orden
+                    </button>
+                  </td>
+                </tr>
+              )}
             </tfoot>
           </table>
-          {/* !detalles.length */}
+          {alerta.mostrar && (
+            <div
+              className={`alert alert-${alerta.color} text-center`}
+              role="alert"
+            >
+              {alerta.msg}
+            </div>
+          )}
         </div>
       </div>
     </>

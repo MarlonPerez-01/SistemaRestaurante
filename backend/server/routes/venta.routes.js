@@ -1,9 +1,7 @@
 import {
-  // actualizar,
   seleccionar,
   insertar,
   eliminar
-  // seleccionarById
 } from '../controllers/venta.controller';
 
 import { ventaSchema } from '../validators/venta.validator';
@@ -18,19 +16,9 @@ import {
 } from '../middlewares/validaciones';
 
 export default (app) => {
-  // app.get('/ventas/:id', validarParams(idSchema), seleccionarById);
-
   app.get('/ventas', validarQuery(intervaloSchema), seleccionar);
 
-  // app.post('/ventas', validarBody(ventaSchema), cajero, insertar);
   app.post('/ventas', validarBody(ventaSchema), cajero, insertar);
 
-  // app.put(
-  //   '/ventas/:id',
-  //   validarParams(idSchema),
-  //   validarBody(ventaSchema),
-  //   actualizar
-  // );
-
-  app.delete('/ventas/:id', validarParams(idSchema), eliminar);
+  app.delete('/ventas/:id', validarParams(idSchema), chef, eliminar);
 };

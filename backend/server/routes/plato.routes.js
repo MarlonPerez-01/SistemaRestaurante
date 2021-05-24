@@ -2,8 +2,7 @@ import {
   actualizar,
   eliminar,
   insertar,
-  seleccionar,
-  seleccionarById
+  seleccionar
 } from '../controllers/plato.controller';
 
 import { platoSchema } from '../validators/plato.validator';
@@ -17,8 +16,6 @@ import {
 } from '../middlewares/validaciones';
 
 export default (app) => {
-  // app.get('/platos/:id', validarParams(idSchema), seleccionarById);
-
   app.get('/platos', validarQuery(intervaloSchema), seleccionar);
 
   app.post('/platos', validarBody(platoSchema), admin, insertar);
