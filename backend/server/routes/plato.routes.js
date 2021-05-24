@@ -19,7 +19,7 @@ import {
 export default (app) => {
   // app.get('/platos/:id', validarParams(idSchema), seleccionarById);
 
-  app.get('/platos', validarQuery(intervaloSchema), admin, seleccionar);
+  app.get('/platos', validarQuery(intervaloSchema), seleccionar);
 
   app.post('/platos', validarBody(platoSchema), admin, insertar);
 

@@ -20,8 +20,9 @@ import {
 export default (app) => {
   // app.get('/ventas/:id', validarParams(idSchema), seleccionarById);
 
-  app.get('/ventas', validarQuery(intervaloSchema), chef, seleccionar);
+  app.get('/ventas', validarQuery(intervaloSchema), seleccionar);
 
+  // app.post('/ventas', validarBody(ventaSchema), cajero, insertar);
   app.post('/ventas', validarBody(ventaSchema), cajero, insertar);
 
   // app.put(

@@ -1,170 +1,214 @@
-import React from 'react';
-import Platos from './Platos';
-import {useState, useEffect} from 'react';
+import React, { useEffect, useState } from 'react';
+import Header from '../Header';
+import * as fetchPlatos from '../../helper/fetchPlatos';
+import * as fetchVentas from '../../helper/fetchVentas';
 
-const Ventas = () => {
-  
-  const [nombres, setNombres] = useState('');
-  const [apellidos, setApellidos] = useState('');
-  //creo un detalle sin nada
-  const detalleEnBlanco = { id_plato: '', cantidad: '' };
-  //asigno detalle en blanco como default
-  const [DetallesVenta, setDetallesState] = useState([
-    {...detalleEnBlanco},
-  ]);
-  /*const platosEnBlanco = { id_plato: 300,
-  nombre: 'menu',
-  precio: 0 };*/
-  const [platos, setPlatos] = useState([ ]);
+const Plato = () => {
+  const [platos, setPlatos] = useState([]);
+  const [opciones, setOpciones] = useState([]);
+  const [opcionActual, setOpcionActual] = useState(0);
+  const [detalles, setDetalles] = useState([]);
   const [total, setTotal] = useState(0);
-  
+  const [cantidadActual, setCantidadActual] = useState(0);
+  const [cliente, setCliente] = useState({ nombres: '', apellidos: '' });
 
-  //agrega los platos de la base al estado platos
-  useEffect(() => {
+  // const [total, setTotal] = useState(0);
 
-    const getPlatos = async () => {
-      const platosServidor = await fetchPlatos();
-      setPlatos(platosServidor);
-    }
+  const obtenerOpciones = async () => {
+    const datos = await fetchPlatos.obtener();
+    setPlatos(datos.data);
+    const nuevasOpciones = datos.data.map((opcion) => {
+      const { id_plato, nombre } = opcion;
+      return { id_plato, nombre };
+    });
 
-    getPlatos();
-		
-	}, []);
-
-  //traer total
-
-  
-
-
-  
-  //funcion para agregar un nuevo detalle en blanco ademas que los que ya estan
-  const agregarDetalle = () => {
-    setDetallesState([...DetallesVenta, {...detalleEnBlanco}]);
-  }
-
-  const detallesChange = (e) => {
-    //crea una copia del estado con todos los  detalles hasta el momento
-    const detallesActualizados = [...DetallesVenta];
-    //uso e.target.dataset.idx para seleccionar el elemnto correcto del array, e.target.className para decir que campo del elemnto modificar
-    detallesActualizados[e.target.dataset.idx][e.target.className] = e.target.value;
-    //console.log(detallesActualizados[e.target.dataset.idx]);
-    //sobreescribe el estado con los cambios
-    setDetallesState(detallesActualizados);
+    setOpciones(nuevasOpciones);
   };
 
-  //para borrado
-  const eEntrada = (e) => {
-    //hace una copia en limpio de todo el estado hasta ahora
-    const todosLosDetalles = [...DetallesVenta];
-    //console.log(e.target.getAttribute("id"));
-    //obtienen el index del elemento que quiero eliminar
-    const index = e.target.getAttribute("id");
-    //remueve dicho index de mi copia del estado
-    todosLosDetalles.splice(index, 1);
-    //sobreescribe el estado con mi copia
-    setDetallesState(todosLosDetalles);
-  }
+  const nuevaOrden = (id) => {
+    //TODO: informar al usuario que falta llenar campos
+    if (cliente.nombres && cliente.apellidos && detalles.length >= 0) {
+      console.log('se puede enviar');
+    } else {
+      console.log('no se puede enviar');
+      return;
+    }
 
-  //agregar a base
-
-  const agregarventas = async (venta) => {
-
-    const res = await fetch('http://localhost:8080/ventas', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json',
-        'x-auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjp7ImlkX3VzdWFyaW8iOjEsImlkX2VtcGxlYWRvIjoxLCJpZF90aXBvX3VzdWFyaW8iOjEsIm5vbWJyZV90aXBvX3VzdWFyaW8iOiJjYWplcm8ifSwiaWF0IjoxNjIxMTM0MTMyLCJleHAiOjE2MjE0OTQxMzJ9.mf-IxfI-fCzkCHm4hrRn5e6tIrGTV9u1anC3BE9yMv0'
-      },
-      body: JSON.stringify(venta)
-    })
-    const data = await res.json();
-    //console.log(data.data);
-    return data.data;
-  }
-
-  //traer platos de la base(peque;o problema aqui porque hay que pasar el token del chef, talves dejar ruta platos publica? de todas fromas es el menu)
-
-  const fetchPlatos = async () => {
-    const res = await fetch('http://localhost:8080/platos', {
-      method: 'GET',
-      headers: {
-        'Content-type': 'application/json',
-        'x-auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjp7ImlkX3VzdWFyaW8iOjIsImlkX2VtcGxlYWRvIjozLCJpZF90aXBvX3VzdWFyaW8iOjMsIm5vbWJyZV90aXBvX3VzdWFyaW8iOiJjaGVmIn0sImlhdCI6MTYyMTIwODg1MSwiZXhwIjoxNjIxNTY4ODUxfQ.QgkdcOKlOr6QUXhIRBk0D_ZuKzmRdfapGHa0o4U1dTo'
-      }
+    //formato esperado por el endpoint en el objeto DetallesVenta
+    const DetallesVenta = detalles.map((detalle) => {
+      let { id_plato, cantidad } = detalle;
+      cantidad = parseInt(cantidad);
+      return { id_plato, cantidad: cantidad };
     });
-    const data = await res.json();
-    //nuestra respuesta regresa un mensaje y un array
-    return data.data;
-  }
 
-  let info = 0;
+    //Creacion del objeto
+    const venta = {
+      nombres: cliente.nombres,
+      apellidos: cliente.apellidos,
+      DetallesVenta
+    };
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    //console.log(detalles);
-    //console.log(res);
-    //espero a que se popule info con await
-    info = await agregarventas({nombres, apellidos, DetallesVenta});
-    //seteo total con el return de info
-    setTotal(info);
-  }
-  
-  
+    //envio de la peticion post
+    fetchVentas.insertar(venta);
+    console.log('nueva orden:', venta);
+  };
+
+  const agregarPlato = () => {
+    const nuevoDetalle = platos.find(
+      (plato) => plato.id_plato === parseInt(opcionActual)
+    );
+
+    //TODO: indicar al usuario que ya esta ese plato
+    const repetido = detalles.find(
+      (plato) => plato.id_plato === parseInt(opcionActual)
+    );
+    if (repetido) return;
+
+    setDetalles([...detalles, { ...nuevoDetalle, cantidad: cantidadActual }]);
+
+    //se suma al total
+    sumarTotal(nuevoDetalle.precio, cantidadActual);
+  };
+
+  const handleCliente = (e) => {
+    setCliente({ ...cliente, [e.target.name]: e.target.value });
+  };
+
+  const handleCantidadActual = (e) => {
+    setCantidadActual(e.target.value);
+  };
+
+  const eliminar = (id) => {
+    console.log('eliminado');
+    //TODO: quitar del total
+  };
+
+  const sumarTotal = (precio, cantidad) => {
+    setTotal(total + precio * cantidad);
+  };
+
+  useEffect(() => {
+    obtenerOpciones();
+  }, []);
+
+  const handleSelect = (e) => {
+    setOpcionActual(e.target.value);
+  };
+
   return (
+    <>
+      <Header />
+      <div className="row">
+        <h1 className="col mb-4 mt-4 text-secondary">Crear Ordenes</h1>
+      </div>
+      <div className="row">
+        <div className="col-3">
+          <h2>Cliente</h2>
+          <div className="form-group mb-3">
+            <input
+              type="text"
+              name="nombres"
+              value={cliente.nombres}
+              placeholder="Nombre"
+              className="form-control mb-2"
+              onChange={handleCliente}
+            />
+            <input
+              type="text"
+              name="apellidos"
+              value={cliente.apellidos}
+              placeholder="Apellido"
+              className="form-control"
+              onChange={handleCliente}
+            />
+          </div>
 
-    <form onSubmit={onSubmit}>            
-      <label htmlFor="nombres">nombres</label>   
-      <input type="text" name="nombres" id="nombres" value={nombres} onChange={(e) => setNombres(e.target.value)} /> 
-      <label htmlFor="apellidos">apellidos</label> 
-      <input type="text" name="apellidos" id="apellidos" value={apellidos} onChange={(e) => setApellidos(e.target.value) } />
-      <input type="button" value="Agregar nuevo detalle" onClick={agregarDetalle} />      
-      {
-        DetallesVenta.map((val, idx) => {
-          const id = `id-${idx}`;
-          const cantidadId = `cantidad-${idx}`;
-          const borradoId = idx;
-          return (
-            <div key={`detalle-${idx}`}>
-              <label htmlFor={id}>{`id #${idx + 1}`}</label>
-              <select
-                type="text"
-                name={id}
-                data-idx={idx}
-                id={id}
-                className="id_plato"
-                value={DetallesVenta[idx].id_plato}
-                onChange={detallesChange} 
-              >
-                <option selected value="0">menu</option>
-                {platos.map((plato) => (
-                  <option key={Math.floor(Math.random() * 10000) + 1} value={plato.id_plato}>{plato.nombre}</option>  
-                ))}
+          <h2>Selección</h2>
+          <div>
+            <select
+              onChange={handleSelect}
+              className="form-select mb-2"
+              value={opcionActual}
+              placeholder="Search"
+            >
+              <option defaultValue>Listado de platillos</option>
+              {opciones.map(({ id_plato, nombre }) => (
+                <option key={id_plato} value={id_plato}>
+                  {nombre}
+                </option>
+              ))}
+            </select>
 
-              </select>
-              <label htmlFor={cantidadId}>Cantidad</label>
-              <input
-                type="text"
-                name={cantidadId}
-                data-idx={idx}
-                id={cantidadId}
-                className="cantidad"
-                value={DetallesVenta[idx].cantidad}
-                onChange={detallesChange}
-              />
-              <label htmlFor="precio">Precio</label>
-              <label>{!DetallesVenta[idx].id_plato ? 'nada' : platos[DetallesVenta[idx].id_plato - 1].precio}</label>
-              <label htmlFor="enInventario">En Inventario</label>
-              <label>{!DetallesVenta[idx].id_plato ? 'nada' : platos[DetallesVenta[idx].id_plato - 1].cantidad_disponible}</label>
-              <label data-idx={idx} id={borradoId} onClick={eEntrada} >X</label>
-            </div>
-          );      
-        })
-      }
-      <input type="submit" value="Submit" />
-      <label htmlFor="total">{total == 0 ? 'su total es: 0' : `su total es de ${total.total}`}</label>        
-    </form> 
-    
-  )
-}
+            <input
+              type="text"
+              name="cantidad"
+              placeholder="Cantidad"
+              className="form-control mb-2"
+              onChange={handleCantidadActual}
+            />
+            <button
+              className="btn btn-primary btn-block form-control"
+              onClick={agregarPlato}
+            >
+              Agregar Plato/s
+            </button>
+          </div>
+        </div>
 
-export default Ventas;
+        <div className="col-9">
+          <h2>Detalles</h2>
+          <table className="table table-striped text-secondary">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Eliminar</th>
+              </tr>
+            </thead>
+            <tbody>
+              {!detalles.length ? (
+                <tr>
+                  <td colSpan="5" className="text-center">
+                    No hay platos aún.
+                  </td>
+                </tr>
+              ) : (
+                detalles.map((detalle) => (
+                  <tr key={detalle.id_plato}>
+                    <td>{detalle.nombre}</td>
+                    <td>{detalle.cantidad}</td>
+                    <td>{detalle.precio}</td>
+                    <td colSpan="2">
+                      <input
+                        type="submit"
+                        className="btn btn-danger"
+                        value="Eliminar"
+                        onClick={() => eliminar(detalle.id_plato)}
+                      />
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+            <tfoot>
+              <tr>
+                <td> </td>
+                <td> </td>
+                <td>Total: ${total.toFixed(2)}</td>
+                <td>
+                  <button className="btn btn-primary mt-2" onClick={nuevaOrden}>
+                    Nueva Orden
+                  </button>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+          {/* !detalles.length */}
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default Plato;
