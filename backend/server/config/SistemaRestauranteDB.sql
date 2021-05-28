@@ -3,6 +3,10 @@
 
 -- tables
 
+DROP  DATABASE SistemaRestauranteDB;
+
+USE SistemaRestauranteDB4;
+
 -- Table: Cliente
 CREATE TABLE Cliente (
     id_cliente int NOT NULL AUTO_INCREMENT,
@@ -45,13 +49,6 @@ CREATE TABLE Plato (
     CONSTRAINT Plato_pk PRIMARY KEY (id_plato)
 );
 
--- Table: Provision
-CREATE TABLE Provision (
-    id_provision int NOT NULL AUTO_INCREMENT,
-    id_plato int NOT NULL,
-    cantidad_disponible int NOT NULL DEFAULT 0,
-    CONSTRAINT Provision_pk PRIMARY KEY (id_provision)
-);
 
 -- Table: TipoUsuario
 CREATE TABLE TipoUsuario (
@@ -91,11 +88,6 @@ ALTER TABLE DetallesVenta ADD CONSTRAINT DetallesVenta_Plato FOREIGN KEY Detalle
 -- Reference: DetallesVenta_Venta (table: DetallesVenta)
 ALTER TABLE DetallesVenta ADD CONSTRAINT DetallesVenta_Venta FOREIGN KEY DetallesVenta_Venta (id_venta)
     REFERENCES Venta (id_venta);
-
-
--- Reference: Provision_Plato (table: Provision)
-ALTER TABLE Provision ADD CONSTRAINT Provision_Plato FOREIGN KEY Provision_Plato (id_plato)
-    REFERENCES Plato (id_plato);
 
 -- Reference: Usuario_Empleado (table: Usuario)
 ALTER TABLE Usuario ADD CONSTRAINT Usuario_Empleado FOREIGN KEY Usuario_Empleado (id_empleado)
