@@ -5,7 +5,7 @@
 
 DROP  DATABASE SistemaRestauranteDB;
 
-USE SistemaRestauranteDB4;
+USE SistemaRestauranteDB;
 
 -- Table: Cliente
 CREATE TABLE Cliente (
