@@ -3,7 +3,9 @@ import React from 'react';
 const Agregar = ({ plato, insertar, handleAgregarChange }) => {
   return (
     <>
-      <h3 className="text-secondary">Nuevo plato</h3>
+      <div className="row">
+        <h1 className="col mb-4 mt-4 titulo">Nuevo plato</h1>
+      </div>
       <form>
         <div className="form-group">
           <label className="form-label" htmlFor="nombre">

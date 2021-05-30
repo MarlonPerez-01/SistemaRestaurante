@@ -53,7 +53,8 @@ const Plato = () => {
     };
 
     //envio de la peticion post
-    fetchVentas.insertar(venta);
+    const sesion = leerSesion();
+    fetchVentas.insertar(venta, sesion.token);
     setAlerta({
       mostrar: true,
       msg: 'La venta fue agregada exitosamente!',
@@ -71,7 +72,7 @@ const Plato = () => {
     const repetido = detalles.find(
       (plato) => plato.id_plato === parseInt(opcionActual)
     );
-    if (repetido || opcionActual === 0) return;
+    if (repetido || opcionActual == 0) return;
 
     setDetalles([...detalles, { ...nuevoDetalle, cantidad: cantidadActual }]);
 
@@ -129,14 +130,14 @@ const Plato = () => {
   };
 
   return (
-    <>
+    <div className='container'>
       <Header />
       <div className="row">
-        <h1 className="col mb-4 mt-4 text-secondary">Crear Ordenes</h1>
+        <h1 className="col mb-4 mt-4 titulo">Crear Ordenes</h1>
       </div>
       <div className="row">
         <div className="col-3">
-          <h2>Cliente</h2>
+          <h2 className='titulo'>Cliente</h2>
           <div className="form-group mb-3">
             <input
               type="text"
@@ -144,6 +145,7 @@ const Plato = () => {
               value={cliente.nombres}
               placeholder="Nombre"
               className="form-control mb-2"
+              autoComplete="off"
               onChange={handleCliente}
             />
             <input
@@ -152,11 +154,12 @@ const Plato = () => {
               value={cliente.apellidos}
               placeholder="Apellido"
               className="form-control"
+              autoComplete="off"
               onChange={handleCliente}
             />
           </div>
 
-          <h2>Selección</h2>
+          <h2 className="titulo">Selección</h2>
           <div>
             <select
               onChange={handleSelect}
@@ -164,7 +167,7 @@ const Plato = () => {
               value={opcionActual}
               placeholder="Search"
             >
-              <option defaultValue>Listado de platillos</option>
+              <option value="0">Listado de platillos</option>
               {opciones.map(({ id_plato, nombre }) => (
                 <option key={id_plato} value={id_plato}>
                   {nombre}
@@ -196,7 +199,7 @@ const Plato = () => {
         </div>
 
         <div className="col-9">
-          <h2>Detalles</h2>
+          <h2 className="titulo">Detalles</h2>
           <table className="table table-striped text-secondary">
             <thead>
               <tr>
@@ -259,7 +262,7 @@ const Plato = () => {
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

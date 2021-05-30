@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import '../../css/auth.css';
 
 import Error from '../Error';
 import { almacenarSesion, leerSesion } from '../../helper/autenticacion';
@@ -88,46 +89,69 @@ const Login = () => {
 
   return (
     <>
-      {error && (
-        <div className="row mt-3">
-          <Error mensaje="Error en la autenticación" />
+      <div className="container-fluid">
+        <div className="row no-gutter">
+          <div
+            className="d-none d-md-flex col-md-4 col-lg-6 bg-image"
+            style={{
+              backgroundImage: `url(${
+                process.env.PUBLIC_URL + '/background.jpg'
+              })`
+            }}
+          />
+          <div className="col-md-8 col-lg-6">
+            <div className="login d-flex align-items-center py-5">
+              <div className="container">
+                <div className="row">
+                  <div className="col-md-9 col-lg-8 mx-auto">
+                    {error && (
+                      <div className="row mt-3">
+                        <Error mensaje="Error en la autenticación" />
+                      </div>
+                    )}
+                    <h3 className="login-heading mb-4">
+                      Bienvenido, Inicia Sesión
+                    </h3>
+                    <form onSubmit={iniciarSesion}>
+                      <div className="form-label-group">
+                        <input
+                          id="nombre_usuario"
+                          name="nombre_usuario"
+                          value={nombre_usuario}
+                          onChange={handleChange}
+                          type="text"
+                          placeholder="Usuario"
+                          className="form-control"
+                          autocomplete="off"
+                          required
+                        />
+                      </div>
+                      <div className="form-label-group">
+                        <input
+                          id="contrasenia"
+                          name="contrasenia"
+                          value={contrasenia}
+                          onChange={handleChange}
+                          type="password"
+                          className="form-control"
+                          placeholder="Contraseña"
+                          autocomplete="off"
+                          required
+                        />
+                      </div>
+                      <input
+                        type="submit"
+                        value="Inicia Sesión"
+                        className="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold w-100"
+                      />
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      )}
-      <div className="row mt-3">
-        <h1 className="col text-center mb-3 mt-3 text-secondary">
-          Inicia Sesión
-        </h1>
       </div>
-
-      <form onSubmit={iniciarSesion}>
-        <label htmlFor="nombre_usuario">Usuario</label>
-        <input
-          id="nombre_usuario"
-          name="nombre_usuario"
-          value={nombre_usuario}
-          onChange={handleChange}
-          type="text"
-          className="form-control"
-          required
-        />
-
-        <label htmlFor="contrasenia">Contraseña</label>
-        <input
-          id="contrasenia"
-          name="contrasenia"
-          value={contrasenia}
-          onChange={handleChange}
-          type="password"
-          className="form-control"
-          required
-        />
-
-        <input
-          type="submit"
-          value="Inicia Sesión"
-          className="btn btn-primary mt-3"
-        />
-      </form>
     </>
   );
 };

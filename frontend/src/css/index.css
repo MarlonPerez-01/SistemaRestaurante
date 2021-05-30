@@ -1,7 +1,14 @@
-* {
-  font-family: 'Lato', sans-serif;
+*{
+  color: #262626;
 }
 
 .texto-grande {
   font-size: 125%;
 }
+
+.titulo{
+  font-family: 'PT Sans';
+  font-weight: normal;  
+
+}
+

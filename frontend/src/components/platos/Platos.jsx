@@ -61,6 +61,10 @@ const Platos = () => {
 
   const insertar = async () => {
     //TODO: validacion de campos
+    if(!plato.nombre || !plato.descripcion || !plato.precio){
+      return;
+    }
+
     try {
       const { token } = leerSesion();
       const datos = await fetchPlatos.insertar(plato, token);
@@ -92,6 +96,7 @@ const Platos = () => {
 
   return (
     <>
+    <div className="container">
       <div className="row mb-5">
         <Header />
       </div>
@@ -108,7 +113,7 @@ const Platos = () => {
         </div>
       </div>
 
-      {/* {!platos.length > 0 && <Error mensaje={mensaje} />} */}
+      </div>
     </>
   );
 };

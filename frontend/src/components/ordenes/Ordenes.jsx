@@ -64,18 +64,20 @@ const Ordenes = () => {
 
   return (
     <>
-      <Header />
-      <div className="row">
-        <h1 className="col mb-4 mt-4 text-secondary">Listado de ordenes</h1>
-      </div>
-      {ordenes.length > 0 && (
+      <div className="container">
+        <Header />
         <div className="row">
-          {ordenes.map((orden) => (
-            <Orden key={orden.id_venta} orden={orden} eliminar={eliminar} />
-          ))}
+          <h1 className="col mb-4 mt-4 text-secondary">Listado de ordenes</h1>
         </div>
-      )}
-      {!ordenes.length > 0 && <Error mensaje={mensaje} />}
+        {ordenes.length > 0 && (
+          <div className="row">
+            {ordenes.map((orden) => (
+              <Orden key={orden.id_venta} orden={orden} eliminar={eliminar} />
+            ))}
+          </div>
+        )}
+        {!ordenes.length > 0 && <Error mensaje={mensaje} />}
+      </div>
     </>
   );
 };

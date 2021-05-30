@@ -6,6 +6,7 @@ import Ventas from './components/ventas/Ventas.jsx';
 import NoEncontrado from './components/noEncontrado/NoEncontrado.jsx';
 
 function App() {
+
   return (
     <>
       <Router>
