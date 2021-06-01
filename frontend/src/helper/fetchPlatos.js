@@ -7,11 +7,9 @@ export const obtener = async (token) => {
         'x-auth-token': token
       }
     });
-    // console.log('des', token);
     const datos = await res.json();
     return datos;
   } catch (err) {
-    console.log('desde catch', token);
     return err;
   }
 };

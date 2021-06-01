@@ -63,16 +63,12 @@ const Login = () => {
   //redireccionar segun el cargo
   const redireccionar = (cargo) => {
     if (cargo === 'ADMIN') {
-      console.log('Es ADMIN');
       history.push('platos');
     } else if (cargo === 'CAJERO') {
-      console.log('Es CAJERO');
       history.push('ventas');
     } else if (cargo === 'CHEF') {
-      console.log('Es CHEF');
       history.push('ordenes');
     } else {
-      console.log('desconocido');
       history.push('/');
     }
   };
@@ -109,6 +105,7 @@ const Login = () => {
                         <Error mensaje="Error en la autenticación" />
                       </div>
                     )}
+                    <div className="imageLogo"></div>
                     <h3 className="login-heading mb-4">
                       Bienvenido, Inicia Sesión
                     </h3>

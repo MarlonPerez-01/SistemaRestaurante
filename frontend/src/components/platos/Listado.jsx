@@ -48,7 +48,7 @@ const Listado = ({ platos, eliminar, setPlatos }) => {
 
   return (
     <>
-      <h3 className="text-secondary">Listado de platos</h3>
+      <h3 className="mt-4">Listado de platos</h3>
 
       <table className="table table-striped text-secondary">
         <thead>

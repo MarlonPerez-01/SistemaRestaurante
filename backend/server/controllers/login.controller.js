@@ -17,7 +17,7 @@ export const seleccionarPorNombreU = async (req, res) => {
     }
 
     //TODO: desencriptar contrasenia
-    
+
     let pass = data[0].contrasenia;
 
     if (pass != contrasenia) {
@@ -26,7 +26,7 @@ export const seleccionarPorNombreU = async (req, res) => {
         .json({ errors: [{ msg: 'Credenciales invalidas' }] });
     }
 
-    console.log(data[0]);
+    // console.log(data[0]);
 
     const payload = {
       usuario: {

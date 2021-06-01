@@ -61,7 +61,7 @@ const Platos = () => {
 
   const insertar = async () => {
     //TODO: validacion de campos
-    if(!plato.nombre || !plato.descripcion || !plato.precio){
+    if (!plato.nombre || !plato.descripcion || !plato.precio) {
       return;
     }
 
@@ -96,23 +96,26 @@ const Platos = () => {
 
   return (
     <>
-    <div className="container">
-      <div className="row mb-5">
+      <div>
         <Header />
-      </div>
-      <div className="row">
-        <div className="col">
-          <Agregar
-            plato={plato}
-            insertar={insertar}
-            handleAgregarChange={handleAgregarChange}
-          />
+        <div className="container">
+          <div className="row">
+            <div className="col">
+              <Agregar
+                plato={plato}
+                insertar={insertar}
+                handleAgregarChange={handleAgregarChange}
+              />
+            </div>
+            <div className="col-8">
+              <Listado
+                platos={platos}
+                eliminar={eliminar}
+                setPlatos={setPlatos}
+              />
+            </div>
+          </div>
         </div>
-        <div className="col-8">
-          <Listado platos={platos} eliminar={eliminar} setPlatos={setPlatos} />
-        </div>
-      </div>
-
       </div>
     </>
   );

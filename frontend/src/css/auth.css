@@ -58,3 +58,14 @@
     color: #777;
   }
 }
+
+
+.imageLogo{
+  background-image: url(../components/assets/logo.png);
+  height: 235px;
+  width: 245px;
+  margin: auto;
+  margin-bottom: 50px;
+  background-repeat: no-repeat;
+  background-size: 100%;
+}

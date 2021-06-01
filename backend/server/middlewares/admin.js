@@ -16,8 +16,6 @@ module.exports = async (req, res, next) => {
 
     const cargo = decoded.usuario.nombre_tipo_usuario;
 
-    console.log(decoded);
-
     //si el cargo en el token no es ADMIN se deniega acceso a esta ruta
     if (cargo != 'ADMIN') {
       return res.status(401).json({ msg: 'acceso denegado' });

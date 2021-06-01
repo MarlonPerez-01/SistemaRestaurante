@@ -11,22 +11,17 @@ const Header = () => {
   };
   const estilos = {
     maxWidth: '100%',
-    maxHeight: '4em'
+    maxHeight: '2em'
   };
   return (
     <>
-      <nav className="navbar navbar-light bg-light">
-        <div className="container-fluid">
+      <nav className="navbar navbar-dark bg-dark">
+        <div className="container">
           <span className="navbar-brand">
-            <img
-              src={process.env.PUBLIC_URL + '/logo-res.png'}
-              alt="logo"
-              className="img-fluid"
-              style={estilos}
-            />
+            Peruvian Restaurant
           </span>
           <input
-            className="btn btn-primary"
+            className="btn text-white"
             type="button"
             value="Cerrar Sesión"
             onClick={cerrarSesion}
@@ -38,3 +33,24 @@ const Header = () => {
 };
 
 export default Header;
+
+/*
+      <nav className="navbar navbar-light bg-light">
+        <div className="container-fluid">
+            <img
+              src={process.env.PUBLIC_URL + '/logo-res2.png'}
+              alt="logo"
+              className="img-fluid"
+              style={estilos}
+            />
+
+          <input
+            className="btn"
+            type="button"
+            value="Cerrar Sesión"
+            onClick={cerrarSesion}
+          />
+        </div>
+      </nav>
+
+*/

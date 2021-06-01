@@ -61,14 +61,14 @@ const Ordenes = () => {
       console.log(err);
     }
   };
-
+  
   return (
     <>
+      <Header /><br /><br /><br /><br />
       <div className="container">
-        <Header />
         <div className="row">
-          <h1 className="col mb-4 mt-4 text-secondary">Listado de ordenes</h1>
-        </div>
+          <h1 className="display-4">Listado de ordenes </h1>
+        </div><br />
         {ordenes.length > 0 && (
           <div className="row">
             {ordenes.map((orden) => (

@@ -1,14 +1,15 @@
+@import url("https://fonts.googleapis.com/css?family=Poppins");
 *{
   color: #262626;
 }
 
-.texto-grande {
-  font-size: 125%;
+.image-order{
+  background-image: url(../components/assets/orden.png);
+  height: 250px;
+  width: 245px;
+  margin: auto;
 }
 
-.titulo{
-  font-family: 'PT Sans';
-  font-weight: normal;  
-
+#mainContainer{
+  padding-top: 20%;
 }
-

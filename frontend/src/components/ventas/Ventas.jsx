@@ -60,7 +60,6 @@ const Plato = () => {
       msg: 'La venta fue agregada exitosamente!',
       color: 'success'
     });
-    console.log('nueva orden:', venta);
   };
 
   const agregarPlato = () => {
@@ -130,136 +129,142 @@ const Plato = () => {
   };
 
   return (
-    <div className='container'>
+    <div>
       <Header />
-      <div className="row">
-        <h1 className="col mb-4 mt-4 titulo">Crear Ordenes</h1>
-      </div>
-      <div className="row">
-        <div className="col-3">
-          <h2 className='titulo'>Cliente</h2>
-          <div className="form-group mb-3">
-            <input
-              type="text"
-              name="nombres"
-              value={cliente.nombres}
-              placeholder="Nombre"
-              className="form-control mb-2"
-              autoComplete="off"
-              onChange={handleCliente}
-            />
-            <input
-              type="text"
-              name="apellidos"
-              value={cliente.apellidos}
-              placeholder="Apellido"
-              className="form-control"
-              autoComplete="off"
-              onChange={handleCliente}
-            />
-          </div>
-
-          <h2 className="titulo">Selección</h2>
-          <div>
-            <select
-              onChange={handleSelect}
-              className="form-select mb-2"
-              value={opcionActual}
-              placeholder="Search"
-            >
-              <option value="0">Listado de platillos</option>
-              {opciones.map(({ id_plato, nombre }) => (
-                <option key={id_plato} value={id_plato}>
-                  {nombre}
-                </option>
-              ))}
-            </select>
-
-            <input
-              type="text"
-              name="cantidad"
-              placeholder="Cantidad"
-              className="form-control mb-2"
-              onChange={handleCantidadActual}
-              value={cantidadActual}
-            />
-            <button
-              className="btn btn-primary btn-block form-control mb-1"
-              onClick={agregarPlato}
-            >
-              Agregar Plato/s
-            </button>
-            <button
-              className="btn btn-warning btn-block form-control"
-              onClick={limpiar}
-            >
-              Limpiar
-            </button>
-          </div>
+      <br />
+      <br />
+      <div className="container">
+        <div className="row">
+          <h1 className="display-4">Crear Ordenes</h1>
         </div>
+        <br />
+        <div className="row">
+          <div className="col-3">
+            <h2 className="titulo">Cliente</h2>
+            <div className="form-group mb-3">
+              <input
+                type="text"
+                name="nombres"
+                value={cliente.nombres}
+                placeholder="Nombre"
+                className="form-control mb-2"
+                autoComplete="off"
+                onChange={handleCliente}
+              />
+              <input
+                type="text"
+                name="apellidos"
+                value={cliente.apellidos}
+                placeholder="Apellido"
+                className="form-control"
+                autoComplete="off"
+                onChange={handleCliente}
+              />
+            </div>
+            <br />
 
-        <div className="col-9">
-          <h2 className="titulo">Detalles</h2>
-          <table className="table table-striped text-secondary">
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Cantidad</th>
-                <th>Precio</th>
-                <th>Eliminar</th>
-              </tr>
-            </thead>
-            <tbody>
-              {!detalles.length ? (
+            <h2 className="titulo">Selección</h2>
+            <div>
+              <select
+                onChange={handleSelect}
+                className="form-select mb-2"
+                value={opcionActual}
+                placeholder="Search"
+              >
+                <option value="0">Listado de platillos</option>
+                {opciones.map(({ id_plato, nombre }) => (
+                  <option key={id_plato} value={id_plato}>
+                    {nombre}
+                  </option>
+                ))}
+              </select>
+
+              <input
+                type="text"
+                name="cantidad"
+                placeholder="Cantidad"
+                className="form-control mb-2"
+                onChange={handleCantidadActual}
+                value={cantidadActual}
+              />
+              <button
+                className="btn btn-success btn-block form-control mb-1"
+                onClick={agregarPlato}
+              >
+                Agregar Plato/s
+              </button>
+              <button
+                className="btn btn-secondary btn-block form-control"
+                onClick={limpiar}
+              >
+                Limpiar
+              </button>
+            </div>
+          </div>
+
+          <div className="col-9">
+            <h2 className="titulo">Detalles</h2>
+            <table className="table table-striped">
+              <thead>
                 <tr>
-                  <td colSpan="5" className="text-center">
-                    No hay platos aún.
-                  </td>
+                  <th>Nombre</th>
+                  <th>Cantidad</th>
+                  <th>Precio</th>
+                  <th>Eliminar</th>
                 </tr>
-              ) : (
-                detalles.map((detalle) => (
-                  <tr key={detalle.id_plato}>
-                    <td>{detalle.nombre}</td>
-                    <td>{detalle.cantidad}</td>
-                    <td>{detalle.precio}</td>
-                    <td colSpan="2">
-                      <input
-                        type="submit"
-                        className="btn btn-danger"
-                        value="Eliminar"
-                        onClick={() => eliminar(detalle.id_plato)}
-                      />
+              </thead>
+              <tbody>
+                {!detalles.length ? (
+                  <tr>
+                    <td colSpan="5" className="text-center">
+                      No hay platos aún.
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-            <tfoot>
-              {detalles.length >= 1 && (
-                <tr>
-                  <td> </td>
-                  <td> </td>
-                  <td>Total: ${total.toFixed(2)}</td>
-                  <td>
-                    <button
-                      className="btn btn-primary mt-2"
-                      onClick={nuevaOrden}
-                    >
-                      Nueva Orden
-                    </button>
-                  </td>
-                </tr>
-              )}
-            </tfoot>
-          </table>
-          {alerta.mostrar && (
-            <div
-              className={`alert alert-${alerta.color} text-center`}
-              role="alert"
-            >
-              {alerta.msg}
-            </div>
-          )}
+                ) : (
+                  detalles.map((detalle) => (
+                    <tr key={detalle.id_plato}>
+                      <td>{detalle.nombre}</td>
+                      <td>{detalle.cantidad}</td>
+                      <td>{detalle.precio}</td>
+                      <td colSpan="2">
+                        <input
+                          type="submit"
+                          className="btn btn-danger"
+                          value="Eliminar"
+                          onClick={() => eliminar(detalle.id_plato)}
+                        />
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+              <tfoot>
+                {detalles.length >= 1 && (
+                  <tr>
+                    <td> </td>
+                    <td> </td>
+                    <td>Total: ${total.toFixed(2)}</td>
+                    <td>
+                      <button
+                        className="btn btn-success mt-2"
+                        onClick={nuevaOrden}
+                      >
+                        Nueva Orden
+                      </button>
+                    </td>
+                  </tr>
+                )}
+              </tfoot>
+            </table>
+            {alerta.mostrar && (
+              <div
+                className={`alert alert-${alerta.color} text-center`}
+                role="alert"
+              >
+                {alerta.msg}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
