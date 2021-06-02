@@ -22,9 +22,6 @@ export const seleccionarPorNombreU = async (req, res) => {
 
     //verificar la contrasenia
     const contraseniaValida = await bcrypt.compareSync(contrasenia, pass);
-
-    console.log('valida: ', contraseniaValida, pass, contrasenia);
-
     if (!contraseniaValida) {
       return res.status(400).json({
         msg: 'Usuario o contrasenia incorrectos'
