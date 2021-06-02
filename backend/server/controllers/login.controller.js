@@ -8,8 +8,6 @@ export const seleccionarPorNombreU = async (req, res) => {
 
   try {
     const data = await Usuario.seleccionarPorNombreU(nombre_usuario);
-    console.log(data);
-
     /*los array vacios cuentan como valores verdaderos asi que lo evaluo asi para que sirva la comprobacion
     en vez de usar !data como haria normalmente*/
     if (data == false) {

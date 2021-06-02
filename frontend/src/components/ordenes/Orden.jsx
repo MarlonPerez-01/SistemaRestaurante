@@ -1,9 +1,11 @@
 import React from 'react';
+import moment from 'moment';
 import Detalles from './Detalles';
 import '../../css/index.css';
 
 const Orden = ({ orden, eliminar }) => {
-  const hora = orden.fecha.split(/[T.]/);
+  moment().format();
+  let hora = moment(orden.fecha);
 
   return (
     <div className="col-3">
@@ -14,7 +16,9 @@ const Orden = ({ orden, eliminar }) => {
           <h6 className="card-subtitle mb-2 text-muted">
             Cliente: {orden.nombres} {orden.apellidos}
           </h6>
-          <h6 className="card-subtitle mb-2 text-muted">Hora: {hora[1]}</h6>
+          <h6 className="card-subtitle mb-2 text-muted">
+            Hora: {hora.format('hh:mm A')}
+          </h6>
           <Detalles detalles={orden.detalles} />
           <br />
           <input
