@@ -5,6 +5,7 @@ import '../../css/index.css';
 const Orden = ({ orden, eliminar }) => {
 
   const hora = orden.fecha.split(/[T.]/);
+  console.log(hora);
   
   return (
     <div className="col-3">

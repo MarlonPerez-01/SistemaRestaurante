@@ -10,10 +10,9 @@ INSERT INTO TipoUsuario (nombre_tipo_usuario) values ("CHEF");
 INSERT INTO TipoUsuario (nombre_tipo_usuario) values ("ADMIN");
 
 /*Usuario*/
-INSERT INTO Usuario (id_empleado, id_tipo_usuario, nombre_usuario, contrasenia, estado) VALUES (1, 1, 'kenny', '123456', true);
-INSERT INTO Usuario (id_empleado, id_tipo_usuario, nombre_usuario, contrasenia, estado) VALUES (1, 2, 'cartman', '123456', true);
-INSERT INTO Usuario (id_empleado, id_tipo_usuario, nombre_usuario, contrasenia, estado) VALUES (1, 3, 'kyle', '123456', true);
-
+INSERT INTO Usuario (id_empleado, id_tipo_usuario, nombre_usuario, contrasenia, estado) VALUES (1, 1, 'kenny', '$2a$10$qAPQMzdpyPFhkFK9ETMin.wgkRZnejJNybTR6fnZoXshlVxKmzbby', true); 
+INSERT INTO Usuario (id_empleado, id_tipo_usuario, nombre_usuario, contrasenia, estado) VALUES (1, 2, 'cartman', '$2a$10$1hQ1U/.U/le/gDryG44pW..bcTw4zd5yTsZznwWDa7d8qQQ1ZiVkW', true); 
+INSERT INTO Usuario (id_empleado, id_tipo_usuario, nombre_usuario, contrasenia, estado) VALUES (1, 3, 'kyle', '$2a$10$Ic/3DosUtizvOv8d1I2IkOTIP6MD3sjTghNh3hq4MwbKpk6ccsCSO', true); 
 
 /*Plato*/
 INSERT INTO Plato (nombre, precio, descripcion, imagen) VALUES ('Carne', 7.00, 'Carne asada', null);

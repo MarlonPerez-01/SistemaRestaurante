@@ -8,7 +8,8 @@ export const pool = mysql.createPool({
   user: process.env.USER_DB,
   password: process.env.PASSWORD,
   database: process.env.DATABASE,
-  connectionLimit: 10
+  connectionLimit: 10,
+  timezone: 'UTC',
 });
 
 export const promisePool = pool.promise();

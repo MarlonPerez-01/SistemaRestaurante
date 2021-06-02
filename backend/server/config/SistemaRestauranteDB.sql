@@ -3,7 +3,8 @@
 
 -- tables
 
-DROP  DATABASE SistemaRestauranteDB;
+DROP DATABASE SistemaRestauranteDB;
+CREATE DATABASE SistemaRestauranteDB;
 
 USE SistemaRestauranteDB;
 

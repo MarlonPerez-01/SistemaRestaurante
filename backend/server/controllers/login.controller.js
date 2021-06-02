@@ -1,12 +1,14 @@
 import * as Usuario from '../models/Login';
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+const bcrypt = require('bcryptjs');
 
 export const seleccionarPorNombreU = async (req, res) => {
   let { nombre_usuario, contrasenia } = res.locals.bodyValidado;
 
   try {
     const data = await Usuario.seleccionarPorNombreU(nombre_usuario);
+    console.log(data);
 
     /*los array vacios cuentan como valores verdaderos asi que lo evaluo asi para que sirva la comprobacion
     en vez de usar !data como haria normalmente*/
@@ -16,18 +18,20 @@ export const seleccionarPorNombreU = async (req, res) => {
         .json({ errors: [{ msg: 'Credenciales invalidas' }] });
     }
 
-    //TODO: desencriptar contrasenia
-
     let pass = data[0].contrasenia;
 
-    if (pass != contrasenia) {
-      return res
-        .status(400)
-        .json({ errors: [{ msg: 'Credenciales invalidas' }] });
+    //verificar la contrasenia
+    const contraseniaValida = await bcrypt.compareSync(contrasenia, pass);
+
+    console.log('valida: ', contraseniaValida, pass, contrasenia);
+
+    if (!contraseniaValida) {
+      return res.status(400).json({
+        msg: 'Usuario o contrasenia incorrectos'
+      });
     }
 
-    // console.log(data[0]);
-
+    //generar el jwt
     const payload = {
       usuario: {
         id_usuario: data[0].id_usuario,

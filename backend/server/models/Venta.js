@@ -15,8 +15,6 @@ export const insertar = async (venta) => {
     let id_cliente = dataCliente[0].insertId;
 
     //obtener el id del cajero
-    //TODO: debe ser obtenido desde la autenticacion
-
     let id_usuario = venta.id_usuario;
 
     //Creando el objeto venta con sus respectivos valores
@@ -52,7 +50,11 @@ export const insertar = async (venta) => {
       total += subtotal;
     });
 
-    dataVenta[0].total = total;
+    //Actualizar total en la venta     
+    const idVenta = dataVenta[0].insertId;
+    let queryTotal = `UPDATE Venta SET total = ${total} WHERE id_venta = ${idVenta}`;
+    await promisePool.query(queryTotal);
+
     return dataVenta;
   } catch (err) {
     throw err;

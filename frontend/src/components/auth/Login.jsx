@@ -119,7 +119,7 @@ const Login = () => {
                           type="text"
                           placeholder="Usuario"
                           className="form-control"
-                          autocomplete="off"
+                          autoComplete="off"
                           required
                         />
                       </div>
@@ -132,7 +132,7 @@ const Login = () => {
                           type="password"
                           className="form-control"
                           placeholder="Contraseña"
-                          autocomplete="off"
+                          autoComplete="off"
                           required
                         />
                       </div>
